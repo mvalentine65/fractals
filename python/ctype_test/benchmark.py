@@ -1,3 +1,6 @@
+"""Calculates the mandlebrot set with a python implementation and a
+c implementation called with ctype. Prints the results to stdout. Takes
+the number of runs as a command line argument."""
 import timeit
 from get_iter import get_iter
 from cbrot import cbrot

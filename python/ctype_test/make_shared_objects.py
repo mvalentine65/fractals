@@ -1,7 +1,15 @@
 #!/usr/bin/python3
+"""
+Contains one function: compile(). compile() searches a directory
+for any file with a '.c' extension and compiles it into a shared object
+file by calling gcc from the command line.
+"""
 import os
 
+
 def compile(path='./') -> None:
+    """Searches the directory at the provided path for .c files and compiles them
+    into shared objects with gcc."""
     source_files = [x for x in os.listdir(path) if x[0] != '.' and x.split('.')[-1]=='c']
     for source_file in source_files:
         base = source_file.split('.')[0]
