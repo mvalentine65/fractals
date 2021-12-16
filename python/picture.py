@@ -3,6 +3,7 @@ Visualizes the mandlebrot set with the given width and height. Requires cbrot.py
 """
 import argparse
 from ctype_test.cbrot import make_cdll_from_so
+from ctype_test.cbrot import make_normalized_cdll_from_so
 from ctype_test.cbrot import call_mandlebrot_cdll
 from helpers import data
 from matplotlib import pyplot as plt
@@ -21,7 +22,12 @@ def get_mandlebrot_function():
     """Getter for mandlebrot function."""
     mandlebrot_function = make_cdll_from_so('ctype_test/mandlebrot.so')
     return mandlebrot_function
-    
+
+
+def get_normalized_mandlebrot_function():
+    """Getter for log normalized version of mandlebrot function."""
+    mandlebrot_function = make_normalized_cdll_from_so('ctype_test/mandlebrot.so')
+    return mandlebrot_function 
 
 def make_plot():
     """Returns a pyplot plot object"""
@@ -29,16 +35,16 @@ def make_plot():
     return plot 
 
 
-def find_value(function, real: float, imaginary: float, max_iterations: int) -> float:
+def find_value(function, real: float, imaginary: float, max_iterations: int, escape_value=4) -> float:
     """Runs the provided function with the provided arguments. Returns the
     (found iterations / max_iterations) % 1 as a float."""
-    value = function(real, imaginary, max_iterations)
-    value = value / max_iterations
-    value = 1 - value
+    value = function(real, imaginary, max_iterations, escape_value)
+    #value = value / max_iterations
+    #value = 1 - value
     return value
 
 
-def fill_graph(matrix: np.matrix, step: float, function, max_iterations: int) -> None:
+def fill_graph(matrix: np.matrix, step: float, function, max_iterations: int, escape_value=4) -> None:
     """Iterates over the given numpy matrix and replaces the existing
     values with the number of iterations at that x,y coodinate."""
     # x starts at -2, ends at 2
@@ -66,18 +72,26 @@ def main(argv):
     parser.add_argument('--max-iterations', type=int, default=200,
                         help="""Maximum number of iterations to try before a
                         starting value is considered in the set.""")
+    parser.add_argument('--escape-value', type=int, default=4,
+                        help="""Escape value used to judge whether a point is
+                        out of set.""")
+    parser.add_argument('--normalize', action='store_true',
+                        help="""Use log normalized colors. WIP""")
     args = parser.parse_args()
-    mandlebrot_function = get_mandlebrot_function()
+    if args.normalize:
+        mandlebrot_function = get_normalized_mandlebrot_function()
+    else:
+        mandlebrot_function = get_mandlebrot_function()
     data = get_data_matrix(args.step)
     time1 = time.time()
-    fill_graph(data, args.step, mandlebrot_function, args.max_iterations)
+    fill_graph(data, args.step, mandlebrot_function, args.max_iterations, args.escape_value)
     time2 = time.time()
     print(time2-time1)
     plt.imshow(data)
     time3 = time.time()
-    plt.show()
     print(time3-time2)
     print(data)
+    plt.show()
 
 
 if __name__ == '__main__':
