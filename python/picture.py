@@ -8,6 +8,7 @@ from helpers import data
 from matplotlib import pyplot as plt
 import numpy as np
 from sys import argv
+import time
 
 
 def get_data_matrix(step: float) -> np.matrix:
@@ -33,7 +34,7 @@ def find_value(function, real: float, imaginary: float, max_iterations: int) -> 
     (found iterations / max_iterations) % 1 as a float."""
     value = function(real, imaginary, max_iterations)
     value = value / max_iterations
-    value = value % 1
+    value = 1 - value
     return value
 
 
@@ -49,7 +50,7 @@ def fill_graph(matrix: np.matrix, step: float, function, max_iterations: int) ->
         imaginary_component = data.find_imaginary_component(step, y)
         for x in range(length):
             real_component = data.find_real_component(step, x)
-            value = function(real_component, imaginary_component, max_iterations)
+            value = find_value(function, real_component, imaginary_component, max_iterations)
             matrix[y][x] = value
 
 
@@ -68,10 +69,14 @@ def main(argv):
     args = parser.parse_args()
     mandlebrot_function = get_mandlebrot_function()
     data = get_data_matrix(args.step)
+    time1 = time.time()
     fill_graph(data, args.step, mandlebrot_function, args.max_iterations)
-    #graph = make_plot()
+    time2 = time.time()
+    print(time2-time1)
     plt.imshow(data)
+    time3 = time.time()
     plt.show()
+    print(time3-time2)
     print(data)
 
 
