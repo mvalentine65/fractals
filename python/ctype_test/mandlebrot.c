@@ -47,7 +47,7 @@ double mandlebrot_log_normalized(double c_real, double c_imaginary, int iteratio
 		z_imaginary_squared = z_imaginary * z_imaginary;
 		current_iteration++;
 		}
-	if (current_iteration == max_iterations) { return 0.; }
+	if (current_iteration == max_iterations) { return current_iteration; }
 	else {	answer = current_iteration + 1 - log(log(sqrt(z_real_squared + z_imaginary_squared))) / log(2); }
 	return answer;
 }
