@@ -77,6 +77,8 @@ def main(argv):
                         out of set.""")
     parser.add_argument('--normalize', action='store_true',
                         help="""Use log normalized colors. WIP""")
+    parser.add_argument('--colormap', default='coolwarm', help='Matplotlib colormap')
+
     args = parser.parse_args()
     if args.normalize:
         mandlebrot_function = get_normalized_mandlebrot_function()
@@ -87,7 +89,7 @@ def main(argv):
     fill_graph(data, args.step, mandlebrot_function, args.max_iterations, args.escape_value)
     time2 = time.time()
     print(time2-time1)
-    plt.imshow(data)
+    plt.imshow(data, cmap=args.colormap)
     time3 = time.time()
     print(time3-time2)
     print(data)
