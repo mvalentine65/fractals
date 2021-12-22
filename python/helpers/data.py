@@ -11,7 +11,6 @@ def find_length(step: float) -> int:
     MAX_DISTANCE = 4
     length = int(MAX_DISTANCE/step) + 1
     return length
-    
 
 
 def make_matrix(step=0.025) -> np.ndarray:
@@ -21,6 +20,15 @@ def make_matrix(step=0.025) -> np.ndarray:
     shape = (length, length)
     matrix = np.zeros(shape)
     return matrix
+
+
+def y_index(matrix: np.matrix, step=0.025) -> None:
+    """Iterates over a 2d numpy array and sets the values in each row to the
+    appropriate y-value. This preserves the imaginary component of each location
+    during the Pool iteration."""
+    height = len(matrix)
+    for y in range(height):
+        matrix[y][0] = 2 - (y*step)
 
 
 def find_delta(step: float, index: int) -> float:
@@ -47,3 +55,4 @@ def find_imaginary_component(step: float, index: int) -> float:
     delta = find_delta(step, index)
     result = Y_START - delta
     return result
+

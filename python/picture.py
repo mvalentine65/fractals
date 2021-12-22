@@ -6,7 +6,9 @@ from ctype_test.cbrot import make_cdll_from_so
 from ctype_test.cbrot import make_normalized_cdll_from_so
 from ctype_test.cbrot import call_mandlebrot_cdll
 from helpers import data
+from helpers import y_index
 from matplotlib import pyplot as plt
+import multiprocessing as multi
 import numpy as np
 from sys import argv
 import time
@@ -29,6 +31,7 @@ def get_normalized_mandlebrot_function():
     mandlebrot_function = make_normalized_cdll_from_so('ctype_test/mandlebrot.so')
     return mandlebrot_function 
 
+
 def make_plot():
     """Returns a pyplot plot object"""
     plot = plt.figure()
@@ -42,6 +45,7 @@ def find_value(function, real: float, imaginary: float, max_iterations: int, esc
     #value = value / max_iterations
     #value = 1 - value
     return value
+
 
 
 def fill_graph(matrix: np.matrix, step: float, function, max_iterations: int, escape_value=4) -> None:
@@ -58,6 +62,19 @@ def fill_graph(matrix: np.matrix, step: float, function, max_iterations: int, es
             real_component = data.find_real_component(step, x)
             value = find_value(function, real_component, imaginary_component, max_iterations)
             matrix[y][x] = value
+
+
+def fill_graph_multiprocess(matrix: np.matrix, step: float, function, max_iterations: int, escape_value=4) -> None:
+    """Iterates over the given numpy matrix and replaces the existing
+    values with the number of iterations at that x,y coodinate. Creates
+    a pool to run multiple processes in parallel."""
+    # x starts at -2, ends at 2
+    # y starts at 2i, ends at -2i
+    # x = -2 + step*index
+    # y = 2 - step*index
+    length = len(matrix)
+    with Pool() as pool:
+        pool.starmap(mapped_array_fill, matrix)
 
 
 def main(argv):
@@ -77,7 +94,10 @@ def main(argv):
                         out of set.""")
     parser.add_argument('--normalize', action='store_true',
                         help="""Use log normalized colors. WIP""")
-    parser.add_argument('--colormap', default='coolwarm', help='Matplotlib colormap')
+    parser.add_argument('--colormap', default='coolwarm',
+                        help='Matplotlib colormap')
+    parser.add_argument('--pool', type=bool, default=False,
+                        help="Enable parallelism")
 
     args = parser.parse_args()
     if args.normalize:
@@ -85,8 +105,13 @@ def main(argv):
     else:
         mandlebrot_function = get_mandlebrot_function()
     data = get_data_matrix(args.step)
+    if args.pool:
+    y_index(data, args.step)
     time1 = time.time()
-    fill_graph(data, args.step, mandlebrot_function, args.max_iterations, args.escape_value)
+    if not args.pool:
+        fill_graph(data, args.step, mandlebrot_function, args.max_iterations, args.escape_value)
+    if args.pool:
+        fill_graph_multiprocess(data, args.step, mandlebrot_function, args.max_iterations, args.escape_value)
     time2 = time.time()
     print(time2-time1)
     plt.imshow(data, cmap=args.colormap)
