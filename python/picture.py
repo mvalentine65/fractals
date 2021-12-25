@@ -6,7 +6,7 @@ from ctype_test.cbrot import make_cdll_from_so
 from ctype_test.cbrot import make_normalized_cdll_from_so
 from ctype_test.cbrot import call_mandlebrot_cdll
 from helpers import data
-from helpers import y_index
+#from helpers import y_index
 from matplotlib import pyplot as plt
 import multiprocessing as multi
 import numpy as np
@@ -105,13 +105,8 @@ def main(argv):
     else:
         mandlebrot_function = get_mandlebrot_function()
     data = get_data_matrix(args.step)
-    if args.pool:
-    y_index(data, args.step)
     time1 = time.time()
-    if not args.pool:
-        fill_graph(data, args.step, mandlebrot_function, args.max_iterations, args.escape_value)
-    if args.pool:
-        fill_graph_multiprocess(data, args.step, mandlebrot_function, args.max_iterations, args.escape_value)
+    fill_graph(data, args.step, mandlebrot_function, args.max_iterations, args.escape_value)
     time2 = time.time()
     print(time2-time1)
     plt.imshow(data, cmap=args.colormap)
