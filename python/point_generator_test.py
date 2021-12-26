@@ -15,7 +15,7 @@ def stepper(step: float) -> float:
 
 
 def make_row(array):
-    length = length(array)
+    length = len(array)
     delta = 4 / length
     for x in range(length):
         value = x * delta
@@ -42,18 +42,17 @@ def get_iter(vals:tuple, thresh:int =4, max_steps:int =50) -> int:
 
 
 def arg_generator(step: float) -> tuple:
-    y = 2
-    x = -2
-    while y >= -2:
-        yield (y,x)
-        x += step
-        if x > 2:
-            x = -2
-            y -= step
+    points = np.linspace(2,-2,int(4/step))
+    for y in points:
+        for x in points[::-1]:
+            yield (y,x)
 
+        
 
 def main(argv):
     step = float(argv[1])
+    number_of_points = int(4/step)
+    shape = (number_of_points, number_of_points) 
     #values = (y//200 for y in range(40000))
     args = arg_generator(step)
     #print(matrix)
@@ -61,13 +60,13 @@ def main(argv):
     matrix = np.array([5])
     print(matrix[0])
     matrix = np.array(pool.map(get_iter, args))
-    matrix = np.reshape(matrix, (200,200))
+    matrix = np.reshape(matrix, shape)
     print(matrix)
     print(type(matrix[0]))
     pool.close()
     pool.join()
     plt.imshow(matrix)
-    plt.show()
+    plt.savefig('pool-map-test.png')
     #gen = stepper(0.02)
     #array = list()
     #number = int(4/0.02)
