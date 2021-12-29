@@ -18,7 +18,7 @@ def make_matrix(step=0.025) -> np.ndarray:
     in the final graph."""
     length = find_length(step)
     shape = (length, length)
-    matrix = np.zeros(shape)
+    matrix = np.zeros(shape, dtype=np.ubyte)
     return matrix
 
 

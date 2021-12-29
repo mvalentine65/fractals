@@ -5,6 +5,7 @@ import argparse
 from ctype_test.cbrot import make_cdll_from_so
 from ctype_test.cbrot import make_normalized_cdll_from_so
 from ctype_test.cbrot import call_mandlebrot_cdll
+from ctype_test.cbrot import make_char_mandlebrot
 from helpers import data
 #from helpers import y_index
 from matplotlib import pyplot as plt
@@ -22,7 +23,7 @@ def get_data_matrix(step: float) -> np.matrix:
 
 def get_mandlebrot_function():
     """Getter for mandlebrot function."""
-    mandlebrot_function = make_cdll_from_so('ctype_test/mandlebrot.so')
+    mandlebrot_function = make_char_mandlebrot('ctype_test/mandlebrot.so')
     return mandlebrot_function
 
 
@@ -64,19 +65,6 @@ def fill_graph(matrix: np.matrix, step: float, function, max_iterations: int, es
             matrix[y][x] = value
 
 
-def fill_graph_multiprocess(matrix: np.matrix, step: float, function, max_iterations: int, escape_value=4) -> None:
-    """Iterates over the given numpy matrix and replaces the existing
-    values with the number of iterations at that x,y coodinate. Creates
-    a pool to run multiple processes in parallel."""
-    # x starts at -2, ends at 2
-    # y starts at 2i, ends at -2i
-    # x = -2 + step*index
-    # y = 2 - step*index
-    length = len(matrix)
-    with Pool() as pool:
-        pool.starmap(mapped_array_fill, matrix)
-
-
 def main(argv):
     parser = argparse.ArgumentParser(
                 description="Visualize the mandlebrot set with the given width and height")
@@ -93,11 +81,11 @@ def main(argv):
                         help="""Escape value used to judge whether a point is
                         out of set.""")
     parser.add_argument('--normalize', action='store_true',
-                        help="""Use log normalized colors. WIP""")
+                        help="""Use log normalized colors. """)
     parser.add_argument('--colormap', default='coolwarm',
                         help='Matplotlib colormap')
     parser.add_argument('--pool', type=bool, default=False,
-                        help="Enable parallelism")
+                        help="***Unimplemented*** Enable parallelism")
 
     args = parser.parse_args()
     if args.normalize:

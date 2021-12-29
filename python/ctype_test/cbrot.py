@@ -26,6 +26,18 @@ def make_normalized_cdll_from_so(so_path: str):
     return mandlebrot_function
 
 
+def make_char_mandlebrot(so_path:str):
+    """Makes a cdll out of the specified shared object file.
+    The generated mandlebrot function returns an unsigned char
+    to minimize memory use."""
+    mandlebrot_so = ctypes.CDLL(so_path)
+    mandlebrot_function = mandlebrot_so.mandlebrot
+    mandlebrot_function.argtypes = (ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int)
+    mandlebrot_function.restype = ctypes.c_ubyte
+    return mandlebrot_function
+
+
+
 def call_mandlebrot_cdll(re: float, im: float, cdll, max_iterations=200, escape_value=4) -> int:
     """Calls the provided mandlebrot cdll with the supplied arguments. Re is the
     real component of C. Im is the imaginary component of C. Returns the iterations
