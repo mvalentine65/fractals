@@ -2,3 +2,6 @@ matplotlib
 numpy
 Sphinx
 sphinx_rtd_theme
+celery
+rabbitmq
+

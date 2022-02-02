@@ -84,7 +84,7 @@ def main(argv):
                         help='Width in inches.')
     parser.add_argument('--height', type=int, default=8,
                         help='Height in inches.')
-    parser.add_argument('--step', type=float, default=0.02,
+    parser.add_argument('--step', type=float, default=0.002,
                         help="Increment for x and y values.")
     parser.add_argument('--max-iterations', type=int, default=200,
                         help="""Maximum number of iterations to try before a
