@@ -3,7 +3,7 @@ from celery import Celery
 import matplotlib.pyplot as plot
 import numpy as np
 
-app = Celery('tasks', backend='rpc://', broker='pyamqp://localhost//')
+app = Celery('tasks', backend='rpc://', broker='pyamqp://192.168.137.11//')
 
 
 def make_axis_values(number: int, start=2, stop=-2) -> np.array:
