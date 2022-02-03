@@ -3,7 +3,7 @@ from celery import Celery
 import numpy as np
 import matplotlib.pyplot as pyplot
 from tasks import *
-
+from time import time
 
 
 if __name__ == '__main__':
@@ -24,9 +24,12 @@ if __name__ == '__main__':
     number = int( (args.y_max-args.y_min) / args.step )
     y_values = make_axis_values(number, args.y_max, args.y_min)
     picture = list(y_values)
+    start_time = time()
     for index in range(number):
         y = y_values[index]
         result = make_row.delay(y, number, args.x_max, args.y_max)
         picture[index]=result.get()
+    end_time = time()
+    print(start_time - end_time)
     pyplot.imshow(picture, cmap=args.colormap)
     pyplot.show()
