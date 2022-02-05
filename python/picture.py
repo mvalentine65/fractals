@@ -1,11 +1,11 @@
 """
-Visualizes the mandlebrot set with the given width and height. Requires cbrot.py.
+Visualizes the mandelbrot set with the given width and height. Requires cbrot.py.
 """
 import argparse
 from ctype_test.cbrot import make_cdll_from_so
 from ctype_test.cbrot import make_normalized_cdll_from_so
-from ctype_test.cbrot import call_mandlebrot_cdll
-from ctype_test.cbrot import make_char_mandlebrot
+from ctype_test.cbrot import call_mandelbrot_cdll
+from ctype_test.cbrot import make_char_mandelbrot
 from helpers import data
 #from helpers import y_index
 from matplotlib import pyplot as plt
@@ -21,16 +21,16 @@ def get_data_matrix(step: float) -> np.matrix:
     return matrix
 
 
-def get_mandlebrot_function():
-    """Getter for mandlebrot function."""
-    mandlebrot_function = make_char_mandlebrot('ctype_test/mandlebrot.so')
-    return mandlebrot_function
+def get_mandelbrot_function():
+    """Getter for mandelbrot function."""
+    mandelbrot_function = make_char_mandelbrot('ctype_test/mandelbrot.so')
+    return mandelbrot_function
 
 
-def get_normalized_mandlebrot_function():
-    """Getter for log normalized version of mandlebrot function."""
-    mandlebrot_function = make_normalized_cdll_from_so('ctype_test/mandlebrot.so')
-    return mandlebrot_function 
+def get_normalized_mandelbrot_function():
+    """Getter for log normalized version of mandelbrot function."""
+    mandelbrot_function = make_normalized_cdll_from_so('ctype_test/mandelbrot.so')
+    return mandelbrot_function 
 
 
 def make_plot():
@@ -67,7 +67,7 @@ def fill_graph(matrix: np.matrix, step: float, function, max_iterations: int, es
 
 def main(argv):
     parser = argparse.ArgumentParser(
-                description="Visualize the mandlebrot set with the given width and height")
+                description="Visualize the mandelbrot set with the given width and height")
     parser.add_argument('--width', type=int, default=8,
                         help='Width in inches.')
     parser.add_argument('--height', type=int, default=8,
@@ -89,12 +89,12 @@ def main(argv):
 
     args = parser.parse_args()
     if args.normalize:
-        mandlebrot_function = get_normalized_mandlebrot_function()
+        mandelbrot_function = get_normalized_mandelbrot_function()
     else:
-        mandlebrot_function = get_mandlebrot_function()
+        mandelbrot_function = get_mandelbrot_function()
     data = get_data_matrix(args.step)
     time1 = time.time()
-    fill_graph(data, args.step, mandlebrot_function, args.max_iterations, args.escape_value)
+    fill_graph(data, args.step, mandelbrot_function, args.max_iterations, args.escape_value)
     time2 = time.time()
     print(time2-time1)
     plt.imshow(data, cmap=args.colormap)

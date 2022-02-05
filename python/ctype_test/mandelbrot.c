@@ -10,7 +10,7 @@ int square_number(int number) {
 // Re_n+1 = a^2 - b^2
 // Im_n+1 = 2ab
 // z_n+1 = (Re_n+1+Im_n+1) + (C_Re + C_Im)
-int mandlebrot(double c_real, double c_imaginary, int iterations, int escape_value) {
+int mandelbrot(double c_real, double c_imaginary, int iterations, int escape_value) {
 	double z_real = 0;
 	double z_imaginary = 0;
 	int max_iterations = iterations;
@@ -30,7 +30,7 @@ int mandlebrot(double c_real, double c_imaginary, int iterations, int escape_val
 }
 
 
-double mandlebrot_log_normalized(double c_real, double c_imaginary, int iterations, int escape_value) {
+double mandelbrot_log_normalized(double c_real, double c_imaginary, int iterations, int escape_value) {
 	double answer;
 	double z_real = 0;
 	double z_imaginary = 0;

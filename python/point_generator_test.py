@@ -4,6 +4,7 @@ import multiprocessing as multi
 import numpy as np
 from sys import argv
 from matplotlib import pyplot as plt
+from time import time
 
 
 def stepper(step: float) -> float:
@@ -58,13 +59,15 @@ def main(argv):
     #print(matrix)
     pool = multi.Pool()
     matrix = np.array([5])
-    print(matrix[0])
+    time1 = time()
     matrix = np.array(pool.map(get_iter, args))
     matrix = np.reshape(matrix, shape)
     print(matrix)
     print(type(matrix[0]))
     pool.close()
     pool.join()
+    time2 = time()
+    print(time2-time1)
     plt.imshow(matrix)
     plt.savefig('pool-map-test.png')
     #gen = stepper(0.02)

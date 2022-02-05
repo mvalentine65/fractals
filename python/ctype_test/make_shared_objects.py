@@ -15,7 +15,7 @@ def compile(path='./') -> None:
         base = source_file.split('.')[0]
         so_name = base + '.so'
         print(f'{source_file} found')
-        command = f'gcc -shared -o {so_name} -fPIC {source_file}'
+        command = f'gcc -shared -O3 -o {so_name} -fPIC {source_file}'
         print(f'{source_file} compiled as shared object file')
         os.system(command)
 
