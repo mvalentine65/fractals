@@ -30,6 +30,6 @@ if __name__ == '__main__':
         result = make_row.delay(y, number, args.x_max, args.y_max)
         picture[index]=result.get()
     end_time = time()
-    print(start_time - end_time)
+    print(end_time - start_time)
     pyplot.imshow(picture, cmap=args.colormap)
     pyplot.show()
